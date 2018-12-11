@@ -1,104 +1,148 @@
-import React from 'react'
-import PropTypes from 'prop-types'
+import _Object$getPrototypeOf from '../polyfills/objectGetPrototypeOf';
+import _classCallCheck from 'babel-runtime/helpers/classCallCheck';
+import _createClass from '../polyfills/createClass';
+import _possibleConstructorReturn from '../polyfills/possibleConstructorReturn';
+import _inherits from '../polyfills/inherits';
+import React from 'react';
+import PropTypes from 'prop-types';
 
-import { search as icons } from '../svgs'
-import NimbleEmojiIndex from '../utils/emoji-index/nimble-emoji-index'
+import { search as icons } from '../svgs';
+import NimbleEmojiIndex from '../utils/emoji-index/nimble-emoji-index';
 
-export default class Search extends React.PureComponent {
-  constructor(props) {
-    super(props)
-    this.state = {
+var Search = function (_React$PureComponent) {
+  _inherits(Search, _React$PureComponent);
+
+  function Search(props) {
+    _classCallCheck(this, Search);
+
+    var _this = _possibleConstructorReturn(this, (Search.__proto__ || _Object$getPrototypeOf(Search)).call(this, props));
+
+    _this.state = {
       icon: icons.search,
-      isSearching: false,
-    }
+      isSearching: false
+    };
 
-    this.data = props.data
-    this.emojiIndex = new NimbleEmojiIndex(this.data)
-    this.setRef = this.setRef.bind(this)
-    this.handleChange = this.handleChange.bind(this)
-    this.clear = this.clear.bind(this)
-    this.handleKeyUp = this.handleKeyUp.bind(this)
+    _this.data = props.data;
+    _this.emojiIndex = new NimbleEmojiIndex(_this.data);
+    _this.setRef = _this.setRef.bind(_this);
+    _this.handleChange = _this.handleChange.bind(_this);
+    _this.clear = _this.clear.bind(_this);
+    _this.handleKeyUp = _this.handleKeyUp.bind(_this);
+    return _this;
   }
 
-  search(value) {
-    if (value == '')
-      this.setState({
-        icon: icons.search,
-        isSearching: false,
-      })
-    else
-      this.setState({
-        icon: icons.delete,
-        isSearching: true,
-      })
 
-    this.props.onSearch(
-      this.emojiIndex.search(value, {
+  _createClass(Search, [{
+    key: 'search',
+    value: function search(value) {
+      if (value == '') this.setState({
+        icon: icons.search,
+        isSearching: false
+      });else this.setState({
+        icon: icons.delete,
+        isSearching: true
+      });
+
+      this.props.onSearch(this.emojiIndex.search(value, {
         emojisToShowFilter: this.props.emojisToShowFilter,
         maxResults: this.props.maxResults,
         include: this.props.include,
         exclude: this.props.exclude,
-        custom: this.props.custom,
-      }),
-    )
-  }
-
-  clear() {
-    if (this.input.value == '') return
-    this.input.value = ''
-    this.search('')
-  }
-
-  handleChange() {
-    this.search(this.input.value)
-  }
-
-  handleKeyUp(e) {
-    if (e.keyCode === 13) {
-      this.clear()
+        custom: this.props.custom
+      }));
     }
-  }
+  },
+  {
+    key: 'showPick',
+    value: function showPick() {
+      let pickIt = document.getElementById('pickItUpEmonji');
+      if(pickIt.style.display==='none'){
+      pickIt.style.display='block';
+      }else{
+      pickIt.style.display='none';  
+      }
+    }
+  },
 
-  setRef(c) {
-    this.input = c
-  }
+  {
+    key: 'clear',
+    value: function clear() {
+      if (this.input.value == '') return;
+      this.input.value = '';
+      this.search('');
+    }
+  }, 
+  {
+    key: 'handleChange',
+    value: function handleChange() {
+      this.search(this.input.value);
+    }
+  }, {
+    key: 'handleKeyUp',
+    value: function handleKeyUp(e) {
+      if (e.keyCode === 13) {
+        this.clear();
+      }
+    }
+  }, {
+    key: 'setRef',
+    value: function setRef(c) {
+      this.input = c;
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var _props = this.props;
+      var i18n = _props.i18n;
+      var autoFocus = _props.autoFocus;
+      var _state = this.state;
+      var icon = _state.icon;
+      var isSearching = _state.isSearching;
 
-  render() {
-    var { i18n, autoFocus } = this.props
-    var { icon, isSearching } = this.state
 
-    return (
-      <div className="emoji-mart-search">
-        <input
-          ref={this.setRef}
-          type="text"
-          onChange={this.handleChange}
-          placeholder={i18n.search}
-          autoFocus={autoFocus}
-        />
-        <button
-          className="emoji-mart-search-icon"
-          onClick={this.clear}
-          onKeyUp={this.handleKeyUp}
-          disabled={!isSearching}
-        >
-          {icon()}
-        </button>
-      </div>
-    )
-  }
-}
+      return React.createElement(
+        'div',
+        { className: 'emoji-mart-search' },
+        React.createElement('input', {
+          ref: this.setRef,
+          type: 'text',
+          onChange: this.handleChange,
+          placeholder: i18n.search,
+          autoFocus: autoFocus
+        }),
+        React.createElement(
+          'button',
+          {
+            className: 'emoji-mart-search-icon',
+            onClick: this.clear,
+            onKeyUp: this.handleKeyUp,
+            disabled: !isSearching
+          },
+          icon()
+        ),
+        React.createElement(
+          'div',
+          {
+            className: 'emoji-pickup',
+            onClick: this.showPick,
+            style:{position:'absolute',right:'5px',top:'5px',width:'20px',height:'20px',border:'1px solid black'}
+  
+          },
+          null
+        )
+      );
+    }
+  }]);
 
-Search.propTypes = {
-  onSearch: PropTypes.func,
-  maxResults: PropTypes.number,
-  emojisToShowFilter: PropTypes.func,
-  autoFocus: PropTypes.bool,
-}
+  return Search;
+}(React.PureComponent);
+
+export default Search;
+
 
 Search.defaultProps = {
-  onSearch: () => {},
+  onSearch: function onSearch() {},
   maxResults: 75,
   emojisToShowFilter: null,
-  autoFocus: false,
-}
+  autoFocus: false
+};
